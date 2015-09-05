@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="author" content="Martin A. Stoffel, Mareike Esser, Hazel Nichols, Patrice David, Joe Hoffman" />
+
+<meta name="date" content="2015-09-04" />
+
+<title>inbreedR step by step</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<link href="data:text/css;charset=utf-8,body%7Bbackground%2Dcolor%3A%23fff%3Bmargin%3A1em%20auto%3Bmax%2Dwidth%3A700px%3Boverflow%3Avisible%3Bpadding%2Dleft%3A2em%3Bpadding%2Dright%3A2em%3Bfont%2Dfamily%3A%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3Bfont%2Dsize%3A14px%3Bline%2Dheight%3A1%2E35%7D%23header%7Btext%2Dalign%3Acenter%7D%23TOC%7Bclear%3Aboth%3Bmargin%3A0%200%2010px%2010px%3Bpadding%3A4px%3Bwidth%3A400px%3Bborder%3A1px%20solid%20%23CCCCCC%3Bborder%2Dradius%3A5px%3Bbackground%2Dcolor%3A%23f6f6f6%3Bfont%2Dsize%3A13px%3Bline%2Dheight%3A1%2E3%7D%23TOC%20%2Etoctitle%7Bfont%2Dweight%3Abold%3Bfont%2Dsize%3A15px%3Bmargin%2Dleft%3A5px%7D%23TOC%20ul%7Bpadding%2Dleft%3A40px%3Bmargin%2Dleft%3A%2D1%2E5em%3Bmargin%2Dtop%3A5px%3Bmargin%2Dbottom%3A5px%7D%23TOC%20ul%20ul%7Bmargin%2Dleft%3A%2D2em%7D%23TOC%20li%7Bline%2Dheight%3A16px%7Dtable%7Bmargin%3A1em%20auto%3Bborder%2Dwidth%3A1px%3Bborder%2Dcolor%3A%23DDDDDD%3Bborder%2Dstyle%3Aoutset%3Bborder%2Dcollapse%3Acollapse%7Dtable%20th%7Bborder%2Dwidth%3A2px%3Bpadding%3A5px%3Bborder%2Dstyle%3Ainset%7Dtable%20td%7Bborder%2Dwidth%3A1px%3Bborder%2Dstyle%3Ainset%3Bline%2Dheight%3A18px%3Bpadding%3A5px%205px%7Dtable%2C%20table%20th%2C%20table%20td%7Bborder%2Dleft%2Dstyle%3Anone%3Bborder%2Dright%2Dstyle%3Anone%7Dtable%20thead%2C%20table%20tr%2Eeven%7Bbackground%2Dcolor%3A%23f7f7f7%7Dp%7Bmargin%3A0%2E5em%200%7Dblockquote%7Bbackground%2Dcolor%3A%23f6f6f6%3Bpadding%3A0%2E25em%200%2E75em%7Dhr%7Bborder%2Dstyle%3Asolid%3Bborder%3Anone%3Bborder%2Dtop%3A1px%20solid%20%23777%3Bmargin%3A28px%200%7Ddl%7Bmargin%2Dleft%3A0%7Ddl%20dd%7Bmargin%2Dbottom%3A13px%3Bmargin%2Dleft%3A13px%7Ddl%20dt%7Bfont%2Dweight%3Abold%7Dul%7Bmargin%2Dtop%3A0%7Dul%20li%7Blist%2Dstyle%3Acircle%20outside%7Dul%20ul%7Bmargin%2Dbottom%3A0%7Dpre%2C%20code%7Bbackground%2Dcolor%3A%23f7f7f7%3Bborder%2Dradius%3A3px%3Bcolor%3A%23333%7Dpre%7Bwhite%2Dspace%3Apre%2Dwrap%3Bborder%2Dradius%3A3px%3Bmargin%3A5px%200px%2010px%200px%3Bpadding%3A10px%7Dpre%3Anot%28%5Bclass%5D%29%7Bbackground%2Dcolor%3A%23f7f7f7%7Dcode%7Bfont%2Dfamily%3AConsolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3Bfont%2Dsize%3A85%25%7Dp%20%3E%20code%2C%20li%20%3E%20code%7Bpadding%3A2px%200px%7Ddiv%2Efigure%7Btext%2Dalign%3Acenter%7Dimg%7Bbackground%2Dcolor%3A%23FFFFFF%3Bpadding%3A2px%3Bborder%3A1px%20solid%20%23DDDDDD%3Bborder%2Dradius%3A3px%3Bborder%3A1px%20solid%20%23CCCCCC%3Bmargin%3A0%205px%7Dh1%7Bmargin%2Dtop%3A0%3Bfont%2Dsize%3A35px%3Bline%2Dheight%3A40px%7Dh2%7Bborder%2Dbottom%3A4px%20solid%20%23f7f7f7%3Bpadding%2Dtop%3A10px%3Bpadding%2Dbottom%3A2px%3Bfont%2Dsize%3A145%25%7Dh3%7Bborder%2Dbottom%3A2px%20solid%20%23f7f7f7%3Bpadding%2Dtop%3A10px%3Bfont%2Dsize%3A120%25%7Dh4%7Bborder%2Dbottom%3A1px%20solid%20%23f7f7f7%3Bmargin%2Dleft%3A8px%3Bfont%2Dsize%3A105%25%7Dh5%2C%20h6%7Bborder%2Dbottom%3A1px%20solid%20%23ccc%3Bfont%2Dsize%3A105%25%7Da%7Bcolor%3A%230033dd%3Btext%2Ddecoration%3Anone%7Da%3Ahover%7Bcolor%3A%236666ff%7Da%3Avisited%7Bcolor%3A%23800080%7Da%3Avisited%3Ahover%7Bcolor%3A%23BB00BB%7Da%5Bhref%5E%3D%22http%3A%22%5D%7Btext%2Ddecoration%3Aunderline%7Da%5Bhref%5E%3D%22https%3A%22%5D%7Btext%2Ddecoration%3Aunderline%7Dcode%20%3E%20span%2Ekw%7Bcolor%3A%23555%3Bfont%2Dweight%3Abold%7Dcode%20%3E%20span%2Edt%7Bcolor%3A%23902000%7Dcode%20%3E%20span%2Edv%7Bcolor%3A%2340a070%7Dcode%20%3E%20span%2Ebn%7Bcolor%3A%23d14%7Dcode%20%3E%20span%2Efl%7Bcolor%3A%23d14%7Dcode%20%3E%20span%2Ech%7Bcolor%3A%23d14%7Dcode%20%3E%20span%2Est%7Bcolor%3A%23d14%7Dcode%20%3E%20span%2Eco%7Bcolor%3A%23888888%3Bfont%2Dstyle%3Aitalic%7Dcode%20%3E%20span%2Eot%7Bcolor%3A%23007020%7Dcode%20%3E%20span%2Eal%7Bcolor%3A%23ff0000%3Bfont%2Dweight%3Abold%7Dcode%20%3E%20span%2Efu%7Bcolor%3A%23900%3Bfont%2Dweight%3Abold%7Dcode%20%3E%20span%2Eer%7Bcolor%3A%23a61717%3Bbackground%2Dcolor%3A%23e3d2d2%7D" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div id="header">
+<h1 class="title">inbreedR step by step</h1>
+<h4 class="author"><em>Martin A. Stoffel, Mareike Esser, Hazel Nichols, Patrice David, Joe Hoffman</em></h4>
+<h4 class="date"><em>2015-09-04</em></h4>
+</div>
+
+
+<div id="inbreedr" class="section level2">
+<h2>inbreedR</h2>
+<p>The idea behind <code>inbreedR</code> is to provide a consistent framework for the analysis of inbreeding and heterozygosity-fitness correlations (HFCs) based on genetic markers. This is the initial version of the package and we are happy about any comments and suggestions. Just write a mail to martin.adam.stoffel[at]gmail.com.</p>
+</div>
+<div id="installation" class="section level2">
+<h2>Installation</h2>
+<p><code>inbreedR</code> is available on <a href="http://cran.r-project.org/">CRAN</a>. Here is the code to download and install the current stable release.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;inbeedR&quot;</span>)</code></pre></div>
+<p>The latest version can be downloaded from <a href="https://github.com/mastoffel/inbreedR">GitHub</a> with the following code:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;devtools&quot;</span>)
+devtools::<span class="kw">install_github</span>(<span class="st">&quot;mastoffel/inbreedR&quot;</span>, <span class="dt">build_vignettes =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<p>The package provides documentation for every function. To get an overview, just look at <code>inbreedR</code>’s help file.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;inbreedR&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">?inbreedR</code></pre></div>
+</div>
+<div id="inbreedr-contains-the-following-functions" class="section level2">
+<h2>inbreedR contains the following functions:</h2>
+<ul>
+<li><p><code>convert_raw</code>: Converts a common format for genetic markers (two columns per locus) into the <code>inbreedR</code> working format, type <code>?convert_raw</code> for detailed information.</p></li>
+<li><p><code>check_data</code>: Checks whether the data.frame or matrix has the correct format for the <code>inbreedR</code> functions.</p></li>
+<li><p><code>sMLH</code>: Computes standardized multilocus heterozygosities <span class="citation">(D. W. Coltman et al. <a href="#ref-coltman1999parasite">1999</a>)</span></p></li>
+<li><p><code>g2_microsats</code>: Calculates <span class="math inline">\(g_2\)</span>, a measure if identity disequlibrium (ID) from smaller datasets, such as microsatellites. Based on the formula from <span class="citation">DAVID et al. (<a href="#ref-DAVID:2007kgba">2007</a>)</span>.</p></li>
+<li><p><code>g2_snps</code>: Calculates <span class="math inline">\(g_2\)</span> for larger datasets, such as SNPs. Allows for parallelization to speed up computation times. Based on the formula from the appendix of <span class="citation">J. I. Hoffman et al. (<a href="#ref-Hoffman:2014bxba">2014</a>)</span>.</p></li>
+<li><p><code>resample_g2</code> : Calculates <span class="math inline">\(g_2\)</span> for randomly drawn subsets of markers. Can be used to explore the influence of marker number.</p></li>
+<li><p><code>HHC</code>: Computes heterozygosity-heterozygosity correlations, another measure of identity disequilibrium <span class="citation">(Balloux, Amos, and Coulson <a href="#ref-balloux2004does">2004</a>)</span>.</p></li>
+<li><p><code>r2_Wf</code> : Calculates the expected impact of inbreeding-level (f) on a fitness trait (W) with a formula derived by <span class="citation">Szulkin, Bierne, and David (<a href="#ref-szulkin2010heterozygosity">2010</a>)</span>.</p></li>
+<li><p><code>r2_hf</code>: Calculates the expected impact of inbreeding-level (f) on heterozygosity (h) with a formula derived by <span class="citation">Szulkin, Bierne, and David (<a href="#ref-szulkin2010heterozygosity">2010</a>)</span>. Also implements a subsampling analysis to explore the influence of marker number.</p></li>
+<li><p><code>plot.inbreedR</code>: Plots the output of <code>inbreedR</code> functions</p></li>
+</ul>
+</div>
+<div id="example-datasets" class="section level2">
+<h2>Example datasets</h2>
+<p>In the following sections, the functionality of <code>inbreedR</code> is illustrated using genetic and phenotypic data from an inbred captive population of oldfield mice (Peromyscus polionotus) <span class="citation">(J. I. Hoffman et al. <a href="#ref-Hoffman:2014bxba">2014</a>)</span>. These mice were paired to produce offspring with a range of inbreeding coefficients (0-0.453) over six generations of laboratory breeding and the resulting pedigree was recorded, from which individual f values were calculated. Example files are provided containing the genotypes of 36 P. polionotus individuals at 12 microsatellites and 13,198 SNPs respectively. Data on body mass at weaning, a fitness proxy, are also available for the same individuals.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(inbreedR)
+<span class="kw">data</span>(<span class="st">&quot;mouse_msats&quot;</span>) <span class="co"># microsatellite data </span>
+<span class="kw">data</span>(<span class="st">&quot;mouse_snps&quot;</span>)  <span class="co"># snp data</span>
+<span class="kw">data</span>(<span class="st">&quot;bodyweight&quot;</span>)  <span class="co"># fitness data</span></code></pre></div>
+</div>
+<div id="data-format-and-checking" class="section level2">
+<h2>Data format and checking</h2>
+<p>The working format of <code>inbreedR</code> is an <code>individual * loci</code> matrix or data frame in which rows represent individuals and each column represents a locus. If an individual is heterozygous at a given locus, it is coded as 1, whereas a homozygote is coded as 0, and missing data are coded as NA. The <code>mouse_snps</code> dataset accompanying the package is already formatted in the right way.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&quot;mouse_snps&quot;</span>)
+mouse_snps[<span class="dv">1</span>:<span class="dv">10</span>, <span class="dv">1</span>:<span class="dv">10</span>]
+<span class="co">#&gt;    SNP1 SNP2 SNP3 SNP4 SNP5 SNP6 SNP7 SNP8 SNP9 SNP10</span>
+<span class="co">#&gt; 11    0   NA   NA    0    0    0   NA    0    1     1</span>
+<span class="co">#&gt; 22    0    0   NA    0    0    0    0    1    0     0</span>
+<span class="co">#&gt; 32    0   NA   NA    0    0    0   NA   NA    1     0</span>
+<span class="co">#&gt; 33    0    0    0    0    0    0    0    1    0     0</span>
+<span class="co">#&gt; 34    1   NA   NA    1    0    0    0    0    0     0</span>
+<span class="co">#&gt; 35    0   NA   NA    0    0    0   NA    0    1     0</span>
+<span class="co">#&gt; 36    1    0   NA    0    0    0   NA    0    1     0</span>
+<span class="co">#&gt; 1     1   NA   NA    0    0    0   NA    0    0     0</span>
+<span class="co">#&gt; 2     0    0   NA    0    0    0   NA   NA    0     0</span>
+<span class="co">#&gt; 3     0    0   NA    0    0    0   NA   NA    0     0</span></code></pre></div>
+<p>You can check whether your data is in the right format with the <code>check_data</code> function, which gives an error with a message when something went wrong and <code>TRUE</code> otherwise. Look up the documentation with <code>?check_data</code> to see what exactly this functions checks for.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">check_data</span>(mouse_snps, <span class="dt">num_ind =</span> <span class="dv">36</span>, <span class="dt">num_loci =</span> <span class="dv">13198</span>)
+<span class="co">#&gt; [1] TRUE</span></code></pre></div>
+<div id="conversion-from-a-more-common-format" class="section level3">
+<h3>Conversion from a more common format</h3>
+<p><code>convert_raw</code> is a function to convert a more common format, where each locus is represented by two columns (alleles), into the <code>inbreedR</code> working format. Microsatellite data is often formatted like <code>mouse_msats</code>, which is the second dataset accompanying the package.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&quot;mouse_msats&quot;</span>)
+mouse_msats[<span class="dv">1</span>:<span class="dv">8</span>, <span class="dv">1</span>:<span class="dv">8</span>]
+<span class="co">#&gt;    Pml01.1 Pml01.2 Po3-68.1 Po3-68.2 Plgt58.1 Plgt58.2 Plgt62.1 Plgt62.2</span>
+<span class="co">#&gt; 1       32      32       52       38       30       30       30       20</span>
+<span class="co">#&gt; 2       14      14       20       20       36       24       30       30</span>
+<span class="co">#&gt; 5       24      14       42       42       36       32       30       30</span>
+<span class="co">#&gt; 6       14      14       40       20       32       32       38       30</span>
+<span class="co">#&gt; 7       34      20       50       48       32       20       28       28</span>
+<span class="co">#&gt; 8       14      14       42       38       32       10       38       28</span>
+<span class="co">#&gt; 9       24      24       60       20       32       30       38       28</span>
+<span class="co">#&gt; 10      32      20       46       38       30       30       30       20</span></code></pre></div>
+<p>To convert it into the <code>inbreedR</code> working format, just use the <code>convert_raw</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mouse_microsats &lt;-<span class="st"> </span><span class="kw">convert_raw</span>(mouse_msats) 
+mouse_microsats[<span class="dv">1</span>:<span class="dv">8</span>, <span class="dv">1</span>:<span class="dv">8</span>]
+<span class="co">#&gt;    V1 V2 V3 V4 V5 V6 V7 V8</span>
+<span class="co">#&gt; 1   0  1  0  1  1  1  1  0</span>
+<span class="co">#&gt; 2   0  0  1  0  1  0  1  1</span>
+<span class="co">#&gt; 5   1  0  1  0  0  0  0  0</span>
+<span class="co">#&gt; 6   0  1  0  1  1  0  1  1</span>
+<span class="co">#&gt; 7   1  1  1  0  0  1  1  1</span>
+<span class="co">#&gt; 8   0  1  1  1  1  0  1  1</span>
+<span class="co">#&gt; 9   0  1  1  1  1  1  1  0</span>
+<span class="co">#&gt; 10  1  1  0  1  0  1  1  0</span></code></pre></div>
+<p>The same procedure works when you have letters (e.g. basepairs ‘A’, ‘T’) in two adjacent columns instead of microsatellite allele lengths.</p>
+</div>
+</div>
+<div id="a-short-theory-of-heterozygosity-fitness-correlations-hfc" class="section level2">
+<h2>A short theory of heterozygosity-fitness correlations (HFC)</h2>
+<p>Most HFC studies solely report the correlation between heterozygosity (<em>h</em>) and fitness (<em>W</em>). However, according to HFC theory, this correlation results from the simultaneous effects of inbreeding level (<em>f</em>) on fitness (<span class="math inline">\(r(W,f)\)</span>) and heterozygosity (<span class="math inline">\(r(h,f\)</span>)) <span class="citation">(Slate et al. <a href="#ref-Slate:2004iibacadaeafagahaia">2004</a>; Szulkin, Bierne, and David <a href="#ref-szulkin2010heterozygosity">2010</a>)</span>:</p>
+<p><span class="math display">\[ r(W,h) = r(h,f)r(W,f) \]</span> (Equation 1)</p>
+<p>Thus, empirical data on heterozygosity and fitness, together with the above equation, allow estimation of the impact of <strong>inbreeding</strong> on <strong>fitness</strong>. In the absence of a pedigree, <em>f</em> cannot be directly estimated. Instead, one can use the extent to which heterozygosity is correlated across loci, termed identity disequilibrium (ID), as a proxy. A measure of ID that can be related to HFC theory is the two-locus heterozygosity disequilibrium, <span class="math inline">\(g_2\)</span> <span class="citation">(DAVID et al. <a href="#ref-DAVID:2007kgba">2007</a>)</span>, which quantifies the extent to which heterozygosities are correlated across pairs of loci. Based on <span class="math inline">\(g_2\)</span> as an estimate of ID, it is then possible to calculate <span class="math inline">\(\hat{r}^2(h, f)\)</span> as follows <span class="citation">(Szulkin, Bierne, and David <a href="#ref-szulkin2010heterozygosity">2010</a>)</span>:</p>
+<p><span class="math display">\[\hat{r}^2(h, f) = \frac{\hat{g}_{2}}{\hat{\sigma}^2(h)}\]</span> (Equation 2)</p>
+<p>Finally, the expected determination coefficient between a fitness trait and inbreeding level can simply be derived be rearranging equation 1 <span class="citation">(Szulkin, Bierne, and David <a href="#ref-szulkin2010heterozygosity">2010</a>)</span>:</p>
+<p><span class="math display">\[\hat{r}^2(W, f) = \frac{\hat{r}^2(W, h)}{\hat{r}^2(h, f)}\]</span> (Equation 3)</p>
+<p>Software is already available for calculating <span class="math inline">\(g_2\)</span> from microsatellite datasets <span class="citation">(DAVID et al. <a href="#ref-DAVID:2007kgba">2007</a>)</span>. However, for larger datasets, e.g. SNPs, the original formula is not computationally practical, as it requires a double summation over all pairs of loci. For example, with 15.000 loci, the double summations take of the order of 0.2 x 109 computation steps. For this reason, <code>inbreedR</code> implements a computationally more feasible formula based on the assumption that missing values do not vary much between pairs of loci <span class="citation">(J. I. Hoffman et al. <a href="#ref-Hoffman:2014bxba">2014</a>)</span>. In turn, the <span class="math inline">\(g_2\)</span> parameter builds the foundation for the implementation of the above framework to analyse HFCs, which is recommended to be routinely computed in future HFC studies <span class="citation">(Szulkin, Bierne, and David <a href="#ref-szulkin2010heterozygosity">2010</a>)</span>.</p>
+</div>
+<div id="identity-disequilibrium" class="section level2">
+<h2>Identity disequilibrium</h2>
+<p>The package provides two functions to calculate <strong><span class="math inline">\(g_2\)</span></strong>, a proxy for Identity disequilibrium, for both small datasets (e.g. microsatellites) and large datasets (e.g.SNPs).</p>
+<ul>
+<li><p>The <code>g2_microsats</code> function implements the formula given in <span class="citation">DAVID et al. (<a href="#ref-DAVID:2007kgba">2007</a>)</span>.</p></li>
+<li><p>For large datasets, e.g. SNPs, the <code>g2_snps</code> function implements a computationally more feasible formula. This function also provides an additional argument for parallelization which distributes bootstrapping and permutation across cores. The results of both functions can be plotted as histograms with CIs.</p></li>
+</ul>
+<p>Have a look at the help files with <code>?g2_microsats</code> and <code>?g2_snps</code> for more information on the formulae.</p>
+<p>For both microsatellites and SNPs, <code>inbreedR</code> calculates confidence intervals by bootstrapping over individuals. It also permutes the genetic data to generate a P-value for the null hypothesis of no variance in inbreeding in the sample (i.e. <span class="math inline">\(g_2\)</span> = 0).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">g2_mouse_microsats &lt;-<span class="st"> </span><span class="kw">g2_microsats</span>(mouse_microsats, <span class="dt">nperm =</span> <span class="dv">100</span>, <span class="dt">nboot =</span> <span class="dv">100</span>, <span class="dt">CI =</span> <span class="fl">0.95</span>)
+g2_mouse_snps &lt;-<span class="st"> </span><span class="kw">g2_snps</span>(mouse_snps, <span class="dt">nperm =</span> <span class="dv">100</span>, <span class="dt">nboot =</span> <span class="dv">10</span>, 
+                         <span class="dt">CI =</span> <span class="fl">0.95</span>, <span class="dt">parallel =</span> <span class="ot">FALSE</span>, <span class="dt">ncores =</span> <span class="ot">NULL</span>)</code></pre></div>
+<p>To display a summary of the results just print the output of an <code>inbreedR</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">g2_mouse_microsats
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Calculation of identity disequilibrium with g2 for microsatellite data</span>
+<span class="co">#&gt; ----------------------------------------------------------------------</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Data: 36 observations at 12 markers</span>
+<span class="co">#&gt; Function call = g2_microsats(genotypes = mouse_microsats, nperm = 100, nboot = 100,     CI = 0.95)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; g2 = 0.02179805, se = 0.02018636</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; confidence interval </span>
+<span class="co">#&gt;        2.5%       97.5% </span>
+<span class="co">#&gt; -0.01140945  0.06613255 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; p (g2 &gt; 0) = 0.11 (based on 100 permutations)</span></code></pre></div>
+<p><code>plot</code> shows the distribution of bootstrap results including the confidence interval.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))
+<span class="kw">plot</span>(g2_mouse_microsats, <span class="dt">main =</span> <span class="st">&quot;Microsatellites&quot;</span>,
+     <span class="dt">col =</span> <span class="st">&quot;cornflowerblue&quot;</span>, <span class="dt">cex.axis=</span><span class="fl">0.85</span>)
+<span class="kw">plot</span>(g2_mouse_snps, <span class="dt">main =</span> <span class="st">&quot;SNPs&quot;</span>,
+     <span class="dt">col =</span> <span class="st">&quot;darkgoldenrod1&quot;</span>, <span class="dt">cex.axis=</span><span class="fl">0.85</span>)</code></pre></div>
+<p><img src="data:image/png;base64,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" alt="Distribution of g2 from bootstrapping with confidence interval" /></p>
+<p>Another approach for estimating ID is to divide the marker panel into two random subsets, compute the correlation in heterozygosity between the two, and repeat this hundreds or thousands of times in order to obtain a distribution of <strong>heterozygosity-heterozygosity correlation coefficients (HHCs)</strong> <span class="citation">(Balloux, Amos, and Coulson <a href="#ref-balloux2004does">2004</a>)</span>. This approach is intuitive but can be criticised on the grounds that samples within the HHC distribution are non-independent. Moreover, <span class="math inline">\(g_2\)</span> is preferable because it directly relates to HFC theory (equation 2). The <code>HHC</code> function in <code>inbreedR</code> calculates HHCs together with confidence intervals, specifying how often the dataset is randomly split into two halves with the <code>niter</code> argument. The results can be outputted as text or plotted as histograms with CIs.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">HHC_mouse_microsats &lt;-<span class="st"> </span><span class="kw">HHC</span>(mouse_microsats , <span class="dt">niter =</span> <span class="dv">1000</span>)
+HHC_mouse_snps &lt;-<span class="st"> </span><span class="kw">HHC</span>(mouse_snps, <span class="dt">niter =</span> <span class="dv">100</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">HHC_mouse_microsats
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; heterozygosity-heterozygosity correlations</span>
+<span class="co">#&gt; ------------------------------------------</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Data: 36 observations at 12 markers</span>
+<span class="co">#&gt; Function call = HHC(genotypes = mouse_microsats, niter = 1000)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; HHC Mean : 0.192</span>
+<span class="co">#&gt; HHC SD: 0.127</span>
+<span class="co">#&gt; HHC CI: [-0.047, 0.458]</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))
+<span class="kw">plot</span>(HHC_mouse_microsats, <span class="dt">main =</span> <span class="st">&quot;Microsatellites&quot;</span>,
+     <span class="dt">col =</span> <span class="st">&quot;cornflowerblue&quot;</span>, <span class="dt">cex.axis=</span><span class="fl">0.85</span>)
+<span class="kw">plot</span>(HHC_mouse_snps, <span class="dt">main =</span> <span class="st">&quot;SNPs&quot;</span>,
+     <span class="dt">col =</span> <span class="st">&quot;darkgoldenrod1&quot;</span>, <span class="dt">cex.axis=</span><span class="fl">0.85</span>)</code></pre></div>
+<p><img src="data:image/png;base64,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" alt="Distribution of heterozygosity-heterozygosity correlations" /></p>
+</div>
+<div id="hfc-parameters" class="section level2">
+<h2>HFC parameters</h2>
+<p>Assuming that HFCs are due to inbreeding depression, it is possible to calculate both the expected correlation between heterozygosity and inbreeding level (<span class="math inline">\(\hat{r}^2(h, f)\)</span>) and the expected correlation between a fitness trait and inbreeding (<span class="math inline">\(\hat{r}^2(W, f)\)</span>) as described in Equation 1. These are implemented in <code>inbreedR</code> using the functions <code>r2_hf</code> and <code>r2_Wf</code>. Equal to the <code>glm</code> function, the distribution of the fitness trait can be specified in the <code>family</code> argument, as shown below:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># r^2 between inbreeding and heterozygosity</span>
+hf &lt;-<span class="st"> </span><span class="kw">r2_hf</span>(<span class="dt">genotypes =</span> mouse_microsats, <span class="dt">type =</span> <span class="st">&quot;msats&quot;</span>)
+<span class="co"># r^2 between inbreeding and fitness</span>
+Wf &lt;-<span class="st"> </span><span class="kw">r2_Wf</span>(<span class="dt">genotypes =</span> mouse_microsats, <span class="dt">trait =</span> bodyweight, 
+            <span class="dt">family =</span> gaussian, <span class="dt">type =</span> <span class="st">&quot;msats&quot;</span>)</code></pre></div>
+</div>
+<div id="workflow-for-estimating-the-impact-of-inbreeding-on-fitness-using-hfc" class="section level2">
+<h2>Workflow for estimating the impact of inbreeding on fitness using HFC</h2>
+<p><span class="citation">Szulkin, Bierne, and David (<a href="#ref-szulkin2010heterozygosity">2010</a>)</span> in their online Appendix 1 provide a worked example of how to estimate the impact of inbreeding on fitness within an HFC framework. Below, we show how the required calculations can be implemented in <code>inbreedR</code>. We are now describing a coding workflow to estimate useful parameters for the interpretation of HFCs. We compare the results based on microsatellite and SNP data derived from a single inbred population of oldfield mice. We start with the estimation of identity disequilibrium (<span class="math inline">\(\hat{g}_2\)</span>) and calculation of the distribution variance of standardized multilocus heterozygosity (<span class="math inline">\(\hat{\sigma}^2(h)\)</span>), followed by the regression slope of fitness on heterozygosity (<span class="math inline">\(\hat{\beta}_{Wh}\)</span>) and the three correlations from equation 1. Example code for the microsatellite dataset is shown below and the results for both microsatellites and SNPs are given in Table 1.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># g2</span>
+g2 &lt;-<span class="st"> </span><span class="kw">g2_microsats</span>(mouse_microsats)
+<span class="co"># calculate sMLH</span>
+het &lt;-<span class="st"> </span><span class="kw">sMLH</span>(mouse_microsats)
+<span class="co"># variance in sMLH</span>
+het_var &lt;-<span class="st"> </span><span class="kw">var</span>(het)
+<span class="co"># Linear model of fitness trait on heterozygosity</span>
+mod &lt;-<span class="st"> </span><span class="kw">lm</span>(bodyweight ~<span class="st"> </span>het)
+<span class="co"># regression slope</span>
+beta &lt;-<span class="st"> </span><span class="kw">coef</span>(mod)[<span class="dv">2</span>]
+<span class="co"># r2 between fitness and heterozygosity</span>
+Wh &lt;-<span class="st"> </span><span class="kw">cor</span>(bodyweight,<span class="kw">predict</span>(mod))^<span class="dv">2</span>
+<span class="co"># r2 between inbreeding and heterozygosity</span>
+hf &lt;-<span class="st"> </span><span class="kw">r2_hf</span>(<span class="dt">genotypes =</span> mouse_microsats, <span class="dt">type =</span> <span class="st">&quot;msats&quot;</span>)
+<span class="co"># r2 between inbreeding and fitness</span>
+Wf &lt;-<span class="st"> </span><span class="kw">r2_Wf</span>(<span class="dt">genotypes =</span> mouse_microsats, <span class="dt">trait =</span> bodyweight, 
+            <span class="dt">family =</span> gaussian, <span class="dt">type =</span> <span class="st">&quot;msats&quot;</span>)</code></pre></div>
+<table>
+<caption>Descriptors of HFCs</caption>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right"><span class="math inline">\(\hat{g}_2\)</span></th>
+<th align="right"><span class="math inline">\(\hat{\sigma}^2(h)\)</span></th>
+<th align="right"><span class="math inline">\(\hat{\beta}_{Wh}\)</span></th>
+<th align="right"><span class="math inline">\(\hat{r}^2_{Wh}\)</span></th>
+<th align="right"><span class="math inline">\(\hat{r}^2_{hf}\)</span></th>
+<th align="right"><span class="math inline">\(\hat{r}^2_{Wf}\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">microsats</td>
+<td align="right">0.022</td>
+<td align="right">0.078</td>
+<td align="right">1.601</td>
+<td align="right">0.121</td>
+<td align="right">0.28</td>
+<td align="right">0.433</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="sensitivity-to-the-number-of-markers" class="section level2">
+<h2>Sensitivity to the number of markers</h2>
+<p>Subsampling analysis <span class="citation">(Miller et al. <a href="#ref-Miller:2013jqbaca">2013</a>; Stoffel et al. <a href="#ref-stoffel2015chemical">2015</a>)</span> can provide insights into the power provided by a given marker panel. The <code>resample_g2</code> function within <code>inbreedR</code> can be used to randomly select marker subsets of specified sizes, from which trends in the average estimated as well as its variance with marker number can be derived. Note that the variance will scale negatively with an increasing proportion of sampled loci. The <code>resample_g2</code> function within inbreedR allows specification of subsets and how often each subset should be resampled (nboot) and calculates the respective <span class="math inline">\(g_2\)</span> values, their mean and standard deviation. The results can be visualised as a series of boxplots with <code>plot</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resamp_g2_mouse_microsats &lt;-<span class="st"> </span><span class="kw">resample_g2</span>(mouse_microsats, <span class="dt">subsets =</span> <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">6</span>,<span class="dv">8</span>,<span class="dv">10</span>,<span class="dv">12</span>), 
+                                     <span class="dt">nboot =</span> <span class="dv">100</span>, <span class="dt">type =</span> <span class="st">&quot;msats&quot;</span>)
+resamp_g2_mouse_snps &lt;-<span class="st"> </span><span class="kw">resample_g2</span>(mouse_snps, <span class="dt">subsets =</span> <span class="kw">c</span>(<span class="dv">100</span>, <span class="dv">500</span>, <span class="dv">1000</span>, <span class="dv">2000</span>, <span class="dv">5000</span>, 
+                                    <span class="dv">13000</span>), <span class="dt">nboot =</span> <span class="dv">10</span>, <span class="dt">type =</span> <span class="st">&quot;snps&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))
+<span class="kw">plot</span>(resamp_g2_mouse_microsats, <span class="dt">main =</span> <span class="st">&quot;Microsatellites&quot;</span>, <span class="dt">col =</span> <span class="st">&quot;cornflowerblue&quot;</span>, <span class="dt">cex.axis=</span><span class="fl">0.85</span>)
+<span class="kw">plot</span>(resamp_g2_mouse_snps, <span class="dt">main =</span> <span class="st">&quot;SNPs&quot;</span>, <span class="dt">col =</span> <span class="st">&quot;darkgoldenrod1&quot;</span>, <span class="dt">cex.axis=</span><span class="fl">0.85</span>)</code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAqAAAAGACAMAAABFpiBcAAAAllBMVEUAAAAAADoAAGYAOjoAOmYAOpAAZmYAZpAAZrY6AAA6ADo6AGY6OgA6OpA6ZmY6kNtkle1mAABmADpmOgBmZgBmZmZmkJBmtrZmtv+QOgCQOjqQZgCQkDqQkGaQtpCQ2/+2ZgC2Zma2kDq2/7a2///bkDrbkJDbtmbb25Db/7bb/9vb////tmb/uQ//25D//7b//9v///8PmKYmAAAACXBIWXMAAA7DAAAOwwHHb6hkAAASt0lEQVR4nO2di3qjSnZGaU+cyJOZOJpJ5sgnFyuJlTlJK7b1/i8XKMC6WEAVtQv+grW+75xWW6VdsL2oG+qiOAEIU8x9AAB9IChIg6AgDYKCNAgK0iAoSIOgIA2CgjQICtIgKEiDoCANgoI0CArSIChIg6AgDYKCNAgK0iAoSIOgIA2CgjQICtIgKEiDoCANgoI0CArSIChIg6AgDYKCNAgK0iAoSIOgIA2CgjSzCXooiuLhrXzxsS1f7U6fL8Xjz7HB/uPt8m8u1Pl/396HKvlNuvdV8t1vYdP8vP3FaDCroD9eyxfHIlbQj+1Dr6C376+dMis1lZn72tRrQevfjARzCvq7p+fqxY8/1Kkazb7oEvT++2vnS8MqLfta1BtBI3ozY+YU9G+3ZU5O+4d/umxBj+2lfSh+/PuTu5Tfn8ofPbefapPnflq9vb/MdRXxpgX99v5VmBWyd2mr2tFdnRTXy9SCtqOuqoREluYU9O9eynR8bB//5ULQfX0BP7dXc/mzw/maPpyv/ONXX9QI6May7r37gp7fvwyzRpoepbzCn5uE764FrRqHV5EszSno875Mw/vT8+Es6LFys0xWmZVDc/WWeawtfW6y6MqUxTfnHNfto9O9fu9qDHr7/kWYVfI1/K8o0/KvZZJuW1B3QStkaVZBj6WYh2J3IWjt0qFp5tzItLneqz9KH6+u50PdZ5/Vq1N8V9CL92/DrI12ktSm97+2xe77GFQkS7MK+v60OZWt6FnQy6n8ob7K2x9Vf20y6y7pNsutoG5IWnf6dwW9fv8rzDo5Xk6SHt4OxeP/fJvFi2RpVkHL8ef/vlT5uRB0cy7gBK0vbZfT3akZR9bFi/a6dwIei35BL96/CLNejhdXd5mPX64EdU2CRpbmFHT3+VJO1B9/Hn1b0OZzTQf03NrbtpBtJrta0N119fPPUOehTt2pydu+Hu//7ulyktQikKVZBS2z889lXo63Y9BjvchRG3kxBj19/vravHSfuZwktS3tqUPQi/cvwkx/3vNTtYzNzaNWUNdY3gqqkaV5BT24HuR4NYvfNCt0raAXs/j6pSvpXlYFN63K+2YMcOlmHfT2/Yswc539rJynQm334zr8G0FFsjSvoO9uJf74fR10c25B23xuzi/PQ/iiWQo5r3PW710Jevv+RZhV8pW7r9W309elftFcamRpRkHr2Uo7PLy6k/R8uhC0noDvzi9dEquUVgsAzS2i1tkqxrcvi9y8fxlmnRzPE/SmCz9+F1QjS3zdDqRBUJAGQUEaBAVpEBSkQVCQBkFBGgQFaRAUpEFQkAZBQRoEBWkQFKRBUJAGQUEaBAVpEBSkQVCQBkFBGgQFaRAUpEFQkAZBQRoEBWkQFKRBUJAGQUEaBAVpEBSkQVCQBkFBGmNBi8Vimyfy6Z0B44TahtNhLkHnqTY9CGoMgtqCoMYgqC0IagyC2oKgxuQmaMA0ZBYQ1JjMBA2aKM8BghqTl6CBSzkzoCPoyOUvNRDUFh1B09QzOQhqC4Iak5egjEFvowx24dLZ8iAzQZnFh4bTTtcwuQmqjpyguYOgtiCoMQhqC4Iag6C2yAmae6YR1BYENQZBbUFQYxDUFgQ1RkbQtd06RlA/ZAQdeiMT5ATNnaQntn8Orjb3RCOoMWlO7GPbdtUPb2HV5p5oBDUm0YkdH3+eaEFNCkaGW01CA3n//esoQXvIYhaFoMYkO/7Pl52xoLGfnAQENSbh8e83foKGbdMhnnAENSbl8R8LP0H/rwsEja9XPF+DCKyDIqgHH9vi8benotjYhMuHVCe2r/voriZ0vKDipBJ0vzkdKjsPHYZmmCo/Ep3Y3i0zlTMlj3wi6DAff3qtF0be/z5wYTl3Ei3Ul/l0+ORTSdDobwQkFNQlNVjQ3M3NTtCoA/bVb4JVsNAuvu6Swrt4BL3LVxff5LWv2sknScMh9AStBqE9QyYEDeVwd5J0t/WaQtCetVbbq4BlJmNWsszUXYdxM42gxixJ0J6WMVDQ8aQW9Bj69bDcSXxiPvm0nsXf1Xopgt5GUf/yTDTZtaBhsYfryFvQVOF0QFDGoNJkJ+i4NaL8BQ24dxxVjxrZ3Ytf6TJTyL3jmHrkyO5e/DoFDbo1F1GPHjnc6gy06259gyHi6/h2YjYFHQhqi7Gg8QPI4RBGU7XkXbzHveNFoXAvfrBxm0RQ6Ra0697x6HDZMO29+LvVGgg6RQg/5JaZckdhmcnArvEF/B33UlhO0NzNVRDUwK4pQiDoHCCogaAdJ+adAQMQNF21k/TP8YKGn5hNwchwCBpdLYIagKDpqkVQA3L3sJOFCDpBiPATsyk4SzgdEJR1UGmyEDSiB7e7GRV+YjYFI8Plbi6CIqg0CIqg0uQgqEc4BJ2onslB0KtKIqZH30/MpmBkOASNrtbgG/VTfOc5/MRsCs4SToeVCNqWS2dm3+FFFZwlnA4LEXSi9nEYBDVmGYLqICeoeL4GyUjQWVtGXyYWdDgfqonyJSNBx8SeHFpQYxDUFgQ1BkFtQVBjENQWOUFzZ0mCzrvA1ByDecFZwumwJEEVQFBjENQWOUEzzOEVCGoLghqDoLYgqDGJjv/zpd6XaY6HKMwKghqT6Pir56JVO9whaHTByHBD9ejeNa5Jc3T1/qD7hzcEjS6YNpzy9xocKQU9HR7/iqCxBZOG0/7mTUXCLr76o0DQ2IJJw61W0HZr5T2CxhaMDNdfj4+g8wrMMpMtyxN05iYWQW3JTNBh/eYeBKSqeV+fl/2DvMTJTdDBDnyhgqZ7kJc42Qk6GHiRgto+Jykn5ATt+4zXtxMXOQZFULuCjo9t65HHskgYPoPUxbWgYQ/yQlAP9h2DpZHhvD+5UEE7HuR1t0NBUB8+X7omnP3hButZqaAB1SJoynpjBV3mGDSoWgQ1rrfoZkTgZbegfJspumB4uOIfu0DQMdUiaABeVzyCmlaLoBHV3Z11BgnKJGmoWgQ1rtdU0KVOkrgXb1UwPJytoMv8uh334n0LVgvGO/eiY3TZEHLF2wo6L6GH55dPbnX6Fjz8eD19bKvLuF/QoCveStDoNSoDAmv1zCeCehas7w+5O8KGCQ0S1PdQZyKsct98ci/es+DH1nVHVb4Q1KBy33x23Yu/W+2aBf26w77fGF7x0wmafgwwpgU9DeczpNo1C/rVEX1su75I1xByxRtPkqJv58cQOgb1zWdAtasWtBSv7pQ+X+wSaixoUOXWhM/i7fO5akET1LtqQRNUi6DG9SKobbUrF/T8rzmazim63snHoCkJrjxBPtct6OlYb1RZ7D62vV+a965XaZkp/vuowZ+wz+e6BW1vDh0efx461pAC61USNDpE8CcT5LObseHnY0wXX/dEx+7NKgPrHRS0J+PDJQYqHz688SfmhX0+445HjDEtaN0RHQZvfvjWOyxoZ4HhEvKC2ucz7njEiBmDdn4TJLDeKQQdboQ7D2/8iflhns/I49FizDKTm3eWF3vXXpWh9U4i6GAII0ZEs85n7PFIkcU6qIegEYPUUcNYrxObEARdvqDRdaTIky+5e9gJgnq3oMMhEuTJFwSdVdBheeZ1PF2efEFQBA0/sQlhDJpS0Ii2K9EsfsplJhMQdFZB45u/YceNzhZBbVmIoGGHKnUnyQYEtTnRu83W5P1zT4HhxnV87JQgqPYy0/jKrVETNHcQ1BgEtSUPQcNmOH3VRnbgHjWkCCpbbXqyEDQi9uSoCZq7uQhqDILakp+gKdeIDEhV+b4elfhshDHJ8UwFghqTqPKQ3QKnOJ7JWJSg0YuYBqSpNWgztgmOZzoWJagCaoLmDoIak7qL99gtcFHkJ6g4qQ45YLfARYGgxrDMZAuCGoOgtuQnqHjGWQe1BUGNYR3UFgQ1Rm2ZSTxdgyCoMWqC5k4iQc+7sho+7VjgPtEwrIPakqwF3fdvhMUsPpD766Dy12s0yQT9egLQcDgETVhthim8Ir8xqDgIaguCGpP4kLs2YUZQBPWDFtSW1IL6XPEImrDaDFN4BS2oMWqC5g6CGqN2Lz53JhZ03NY3OaF2Lz530i3U+1/xZtsyKKB2qzPDFF6RSlC+fWMKgtoVdJBQY0bfi19NPhHUj2nvxQ9Xu5p8ju3iueLnrXY1+Qw9Uf4V4hqqTY/COuiiQFBbENQYBLUlqaBdM6S+cLlnWk3Q1eQTQf1AUFsQ1BgEtQVBjUFQW+QmSatJ6ETVriafzOL9UBM0dxDUGAS1BUGNQVBb5ATNPdNqgq4mnwjqB4LagqDGIKgtCGoMgtqCoMYgqC1yguaOmqC5g6DGIKgtCGoMgtoiJ2jumVYTdDX5RFA/ENSWiQUd3jNkNQmdqNrV5JMW1A8EtQVBjUl0/J8v9T/hZofl6IKzhNMh0YlVD02pNsMIFjR3ENSYNCdWbyW0f3hD0OiCs4TTIaWgp8PjXxE0tmBkuNwznbCLr/7weXLfFMczGQhqTLJJUr0L2x5BYwtGhltNQieqdjX5RFA/ENQWBDUm1fGPfcrHavLJLN6PVJMknvJhVXCWcDokXWYasaV67iCoMQhqi5yguWc6dRfPnv+xBSPDrSahgfCUD6uCNR/b4vG3p6LoGNOT0KmqXU0+A090vymv+dLOA0+aS1obXwAPLuioBvXvv3/lQV7W8H3Q6IKOSlA382TWuehq05Osi29mm8FdfO4gqC3JZvHu+2GdNz5I6DKqTQ/LTMZwL94WBDVG7V78avI58kSZdZrA483tCkaGW01Cg0BQu4JjwxXX2FY3HTL34teWT5szzD9hQ6jdi8+ddMtMJHQF1aYn8UI93wBfdrXpSXir08GtTkPGPJw3dxDUGAS1JXkXH/oN8NxBUFuSTZKYddqDoBYFPcMtFts8kU/vDKRMb0g9wweiEUIEjWRMkM8xEXq6pPH1LCWhE6GRDATVCyGCRjIQVC+ECBrJQFC9ECJoJENU0CT1LCWhE6GRDATVCyGCRjIQVC+ECBrJQFC9ECJoJGNBggKMAkFBGgQFaRAUpEFQkAZBQRoEBWkQFKRBUJAGQUEaBAVpEBSkQVCQBkFBGgQFaSYR9GNbFB17hn/hng/Ww74ofvSVqOroevZIxefLzv2/c1eUuoDPoc7I9Vn0nE3IxwPCvD8VRfH4MyZEIFMI+rEtj/3Q/2v/fOnV77R/7t4Yv/78pvyvO0dlBnd1KXc0XQV8DnVGrs+i52xCPh4S5rhpAo0PEcgUgjqxvjbGu8/hH3pb0KH2tUzPrvvxYtWWUn/z510T5nhv47OmgM+hzsfNWXSfTdDHQ8Lsd+6PmBCBTDYG7Vfs/Y+/9b4/ePIDLeh/v7nezYW5+6+mmwIehzojN2fRfTZBHw8I8/nrH1wPHxEilKkE7X44nXv319d+Kw6P/zk0NiwHqbuet93v5uASeb+mL0H7D3Vers6i72wCPh4QxnXj73/8GREilIkEHfilH54HTu9QDIxBXer2PZV4C6rs59yCOsrR1OIEfX/qHUCX1+SQoFUGzp3wd45DKRro4r+iDxzqzER18R0fDw1TBllaF3/sn6G3u+L29NBHG0FdDjvGs3X0oUOdmauz6DubgI8HhGnnkBEhQplCUK+2v79QfekPdvE9KXIR+pZD6l+e6vyo4eoswhd37n48IEzbAi9smWm4gTwNqlGtBPdOkqoV9r5L2G+h3utQZ2Tuhfo2y8taqAcYDYKCNAgK0iAoSIOgIA2CgjQICtIgKEiDoCANgoI0CArSIChIg6AgDYKCNAgK0iAoSIOgIA2CgjQICtIgKEiDoCANgoI0CArSIChIg6AgDYKCNAgK0uQi6PuTx35Jh3qDILcd+A33frZmssnnkgRt91dDxmGyyeeyBN1d/QndZJNPIUE/tr9sq50PXT7K/70/VX9/rh7NsysT+penZoe/aovE52of1X9rN2Q8up9UBd0PXID6Z03xzRqlXUY+pQT98Xo6/Hg9J7T6e5Wjw8Ob+4vbnvvQvPjYttuBHt1vYXN1xbc/c8XLvmqVgi4hn1KCPruu55zQ52bL+PKH9dbxZWbrgdGxfXE6NU+fOTa/CRdod/EzgXHUPCwjn1KC1ok8J3TXjJVcQpsd5OtN5Nu8n07tcOriJ+1nz59bqaBLyGc2grodwsv/H4tml+6bhLYfPF0ktHrR7CyOoJnmMxtBr6/400WKtK54HZaRT0lBn8+5OCfUjZkef35l5uuF1phJh2XkU1DQz5fqOSfFbULLK72aSrpp5Gl/Tp/HrPPzZbNiQfPOp6Cg7lknv3zrkv7y1DweplqIe3i7vIabNbqrhWXWQZeRTyFBAb6DoCANgoI0CArSIChIg6AgDYKCNAgK0iAoSIOgIA2CgjQICtIgKEiDoCANgoI0CArSIChIg6AgDYKCNAgK0iAoSIOgIA2CgjQICtL8P1YcXgW+xqGHAAAAAElFTkSuQmCC" alt="g2 for different subsets of markers" /></p>
+<p>Finally, sensitivity of <span class="math inline">\(\hat{r}^2(h, f)\)</span> towards the number of markers used can be explored in a similar way using the <code>r2_hf</code> function, which again allows specification of the marker subsets and how often each subset should be sampled.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">r2_hf_mouse_microsats &lt;-<span class="st"> </span><span class="kw">r2_hf</span>(mouse_microsats, <span class="dt">subsets =</span> <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">6</span>,<span class="dv">8</span>,<span class="dv">10</span>,<span class="dv">12</span>), 
+                           <span class="dt">nboot =</span> <span class="dv">100</span>, <span class="dt">type =</span> <span class="st">&quot;msats&quot;</span>)
+r2_hf_mouse_snps &lt;-<span class="st"> </span><span class="kw">r2_hf</span>(mouse_snps, <span class="dt">subsets =</span> <span class="kw">c</span>(<span class="dv">100</span>, <span class="dv">500</span>, <span class="dv">1000</span>, <span class="dv">2000</span>, <span class="dv">5000</span>, <span class="dv">13000</span>), 
+                          <span class="dt">nboot =</span> <span class="dv">10</span>, <span class="dt">type =</span> <span class="st">&quot;snps&quot;</span>)</code></pre></div>
+<p><img src="data:image/png;base64,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" alt="Expected r2 between inbreeding level (f) and heterozygosity" /></p>
+</div>
+<div id="extracting-raw-data-from-inbreedr-objects" class="section level2">
+<h2>Extracting raw data from inbreedR objects</h2>
+<p>You may wish to extract and plot the data yourself. Most function outputs are <code>inbreed</code> objects and lists. In the <code>Value</code> section of each functions documentation (<code>?fun</code> ), you can see the data which you can extract. Alternatively, use <code>str()</code> to look at the object’s structure. Just index the function output with <code>[[&quot;.&quot;]]</code> or <code>$</code> as in the following example:</p>
+<p>Running the function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">g2_seals &lt;-<span class="st"> </span><span class="kw">g2_microsats</span>(mouse_microsats, <span class="dt">nperm =</span> <span class="dv">100</span>, 
+                         <span class="dt">nboot =</span> <span class="dv">100</span>, <span class="dt">CI =</span> <span class="fl">0.95</span>)</code></pre></div>
+<p>Looking at the structure.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(g2_seals)
+<span class="co">#&gt; List of 9</span>
+<span class="co">#&gt;  $ call     : language g2_microsats(genotypes = mouse_microsats, nperm = 100, nboot = 100,      CI = 0.95)</span>
+<span class="co">#&gt;  $ g2       : num 0.0218</span>
+<span class="co">#&gt;  $ p_val    : num 0.09</span>
+<span class="co">#&gt;  $ g2_permut: num [1:100] 0.0218 -0.00696 0.02762 -0.00665 0.01415 ...</span>
+<span class="co">#&gt;  $ g2_boot  : num [1:100] 0.0218 0.03674 0.04558 -0.00278 -0.00373 ...</span>
+<span class="co">#&gt;  $ CI_boot  : Named num [1:2] -0.0103 0.0599</span>
+<span class="co">#&gt;   ..- attr(*, &quot;names&quot;)= chr [1:2] &quot;2.5%&quot; &quot;97.5%&quot;</span>
+<span class="co">#&gt;  $ g2_se    : num 0.0209</span>
+<span class="co">#&gt;  $ nobs     : int 36</span>
+<span class="co">#&gt;  $ nloc     : int 12</span>
+<span class="co">#&gt;  - attr(*, &quot;class&quot;)= chr &quot;inbreed&quot;</span></code></pre></div>
+<p>Now extract whatever you want from the object, such as the <span class="math inline">\(g_2\)</span> bootstrap results.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">g2_bootstrap_results &lt;-<span class="st"> </span>g2_seals$g2_boot
+<span class="kw">str</span>(g2_bootstrap_results)
+<span class="co">#&gt;  num [1:100] 0.0218 0.03674 0.04558 -0.00278 -0.00373 ...</span></code></pre></div>
+<div class="references">
+<h2 id="literature" class="unnumbered">Literature</h2>
+<div id="ref-balloux2004does">
+<p>Balloux, F, W Amos, and T Coulson. 2004. “Does Heterozygosity Estimate Inbreeding in Real Populations?” <em>Molecular Ecology</em> 13 (10). Wiley Online Library: 3021–31.</p>
+</div>
+<div id="ref-coltman1999parasite">
+<p>Coltman, David W, Jill G Pilkington, Judith A Smith, and Josephine M Pemberton. 1999. “Parasite-Mediated Selection Against Inbred Soay Sheep in a Free-Living, Island Population.” <em>Evolution</em>, no. 53(4. JSTOR: 1259–67.</p>
+</div>
+<div id="ref-DAVID:2007kgba">
+<p>DAVID, PATRICE, BENOÎT PUJOL, FRÉDÉRIQUE VIARD, VINCENT CASTELLA, and JÉRÔME GOUDET. 2007. “Reliable selfing rate estimates from imperfect population genetic data.” <em>Molecular Ecology</em> 16 (12): 2474.</p>
+</div>
+<div id="ref-Hoffman:2014bxba">
+<p>Hoffman, J I, F Simpson, P David, J M Rijks, T Kuiken, M A S Thorne, R C Lacy, and K K Dasmahapatra. 2014. “High-throughput sequencing reveals inbreeding depression in a natural population.” <em>Proceedings of the National Academy of Sciences</em> 111 (10): 3775–80.</p>
+</div>
+<div id="ref-Miller:2013jqbaca">
+<p>Miller, J M, R M Malenfant, P David, C S Davis, J Poissant, J T Hogg, M Festa-Bianchet, and D W Coltman. 2013. “Estimating genome-wide heterozygosity: effects of demographic history and marker type.” <em>Heredity</em> 112 (3): 240–47.</p>
+</div>
+<div id="ref-Slate:2004iibacadaeafagahaia">
+<p>Slate, J, P David, K G Dodds, B A Veenvliet, B C Glass, T E Broad, and J C McEwan. 2004. “Understanding the relationship between the inbreeding coefficient and multilocus heterozygosity: theoretical expectations and empirical data.” <em>Heredity</em> 93 (3): 255.</p>
+</div>
+<div id="ref-stoffel2015chemical">
+<p>Stoffel, Martin A, Barbara A Caspers, Jaume Forcada, Athina Giannakara, Markus Baier, Luke Eberhart-Phillips, Caroline Müller, and Joseph I Hoffman. 2015. “Chemical Fingerprints Encode Mother–offspring Similarity, Colony Membership, Relatedness, and Genetic Quality in Fur Seals.” <em>Proceedings of the National Academy of Sciences</em>. National Acad Sciences, 201506076.</p>
+</div>
+<div id="ref-szulkin2010heterozygosity">
+<p>Szulkin, Marta, Nicolas Bierne, and Patrice David. 2010. “HETEROZYGOSITY-FITNESS CORRELATIONS: A TIME fOR REAPPRAISAL.” <em>Evolution</em> 64 (5). Wiley Online Library: 1202–17.</p>
+</div>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

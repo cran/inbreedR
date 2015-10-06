@@ -74,6 +74,13 @@ hf <- r2_hf(genotypes = mouse_microsats, type = "msats")
 Wf <- r2_Wf(genotypes = mouse_microsats, trait = bodyweight, 
             family = gaussian, type = "msats")
 
+## ---- echo=TRUE, results = "hide"----------------------------------------
+# r^2 between inbreeding and heterozygosity with bootstrapping
+hf <- r2_hf(genotypes = mouse_microsats, nboot = 100, type = "msats", parallel = FALSE)
+
+## ------------------------------------------------------------------------
+plot(hf, plottype = "histogram")
+
 ## ---- echo=TRUE, results='hide'------------------------------------------
 # g2
 g2 <- g2_microsats(mouse_microsats)

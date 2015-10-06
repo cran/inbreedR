@@ -1,6 +1,6 @@
 Package: inbreedR
 Title: Analysing Inbreeding Based on Genetic Markers
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(
         person(c("Martin", "A."), "Stoffel", 
                email= "martin.adam.stoffel@gmail.com", role = c("aut", "cre")),
@@ -10,14 +10,13 @@ Description: A framework for analysing inbreeding and heterozygosity-fitness cor
 Depends: R (>= 3.2.2)
 License: GPL-2
 LazyData: true
-Imports: data.table (>= 1.9.4), parallel (>= 3.2.2), stats (>= 3.2.2),
-        graphics (>= 3.2.2)
+Imports: data.table (>= 1.9.4), parallel, stats, graphics
 Suggests: testthat (>= 0.10.0), knitr
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2015-09-04 20:24:51 UTC; Martin
+Packaged: 2015-10-06 14:45:18 UTC; Martin
 Author: Martin A. Stoffel [aut, cre],
   Mareike Esser [aut]
 Maintainer: Martin A. Stoffel <martin.adam.stoffel@gmail.com>
 Repository: CRAN
-Date/Publication: 2015-09-05 09:38:45
+Date/Publication: 2015-10-06 18:25:28

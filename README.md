@@ -4,19 +4,19 @@ inbreedR
 
 ![Build Status](https://travis-ci.org/mastoffel/inbreedR.svg?branch=master)
 
-inbreedR provides functions and workflows for the analysis of inbreeding and heterozygosity-fitness correlations (HFCs) based on molecular markers such as microsatellites and SNPs. It has four main application areas:
+`inbreedR` provides functions and workflows for the analysis of inbreeding and heterozygosity-fitness correlations (HFCs) based on molecular markers such as microsatellites and SNPs. It has four main application areas:
 
 -   Quantifying variance in inbreeding through estimation of identitiy disequilibria (g2), heterozygosity-heterozygosity correlations (HHC) and variance in standardized multilocus heterozygosity (sMLH)
 
--   Calculating g2 for large SNP datasets. Through the use of the data.table package and parallelization, bootstrapping and permutation tests are feasible within acceptable time frames
+-   Calculating g2 for large SNP datasets. The use of `data.table` and parallelization speed up bootstrapping and permutation tests
 
--   Estimating central parameters within HFC theory, such as the influence of inbreeding on heterozygosity and fitness
+-   Estimating central parameters within HFC theory, such as the influence of inbreeding on heterozygosity and fitness, and their confidence intervals.
 
 -   Exploring the sensitivity of these measures towards the number of genetic markers used in your study through re- and subsampling tests.
 
 You can install:
 
--   the latest released version from CRAN (not yet) with
+-   the latest released version from CRAN with
 
     ``` r
     install.packages("inbreedR")

@@ -8,11 +8,11 @@ inbreedR
 
 -   Quantifying variance in inbreeding through estimation of identitiy disequilibria (g2), heterozygosity-heterozygosity correlations (HHC) and variance in standardized multilocus heterozygosity (sMLH)
 
--   Calculating g2 for large SNP datasets. The use of `data.table` and parallelization speed up bootstrapping and permutation tests
+-   Calculating g2 for small and large SNP datasets. The use of `data.table` and parallelization speed up bootstrapping and permutation tests
 
 -   Estimating central parameters within HFC theory, such as the influence of inbreeding on heterozygosity and fitness, and their confidence intervals.
 
--   Exploring the sensitivity of these measures towards the number of genetic markers used in your study through re- and subsampling tests.
+-   Exploring the sensitivity of these measures towards the number of genetic markers using simulations
 
 You can install:
 
@@ -31,7 +31,7 @@ You can install:
     devtools::install_github("mastoffel/inbreedR", build_vignettes = TRUE)
     ```
 
-If you encounter a clear bug or if you have any suggestions for improvement, just contact me: martin.adam.stoffel\[at\]gmail.com
+If you encounter a clear bug or if you have any suggestions for improvement, just contact me: martin.adam.stoffel[at]gmail.com
 
 Get started with inbreedR
 -------------------------

@@ -1,7 +1,7 @@
 #' Expected r2 between inbreeding level (f) and fitness (W)
 #'
-#' @param genotypes data.frame with individuals in rows and loci in columns,
-#'        containing genotypes coded as 0 (homozygote), 1 (heterozygote) and NA (missing).
+#' @param genotypes \code{data.frame} with individuals in rows and loci in columns,
+#'        containing genotypes coded as 0 (homozygote), 1 (heterozygote) and \code{NA} (missing).
 #' @param trait vector of any type which can be specified in R's glm() function
 #' @param family distribution of the trait. Default is gaussian. For other distributions, just naming the distribution
 #'        (e.g. binomial) will use the default link function (see ?family). Specifying another
@@ -89,8 +89,8 @@ r2_Wf <- function(genotypes, trait, family = "gaussian", type = c("msats", "snps
         # according to the miller paper, negative g2s are set to r2 = 0.
         if (g2 < 0) return( r2_Wf_res <- 0)
         # squared correlation between inbreeding and the fitness trait
-        r2_Wf_res <- (R2 * stats::var(het, na.rm = TRUE)) / (g2 * mean(het, na.rm = TRUE)^2)
-        # r2_Hf_res <- R2 / r2_Wf_res
+        # According to szulkin et al. 2010, table 2
+        r2_Wf_res <- (R2 / g2) * stats::var(het, na.rm = TRUE)
     }
     
     # r2_Wf for the full dataset 

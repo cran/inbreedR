@@ -2,7 +2,7 @@
 #'
 #' @description 
 #' 
-#' inbreedR contains the following functions:
+#' \code{inbreedR} contains the following functions:
 #'
 #' \link{g2_microsats}
 #' \link{g2_snps}
@@ -10,9 +10,11 @@
 #' \link{check_data}
 #' \link{r2_hf}
 #' \link{r2_Wf}
-#' \link{resample_g2}
 #' \link{HHC}
 #' \link{sMLH}
+#' \link{MLH}
+#' \link{simulate_g2}
+#' \link{simulate_r2_hf}
 #' \link{plot.inbreed}
 #' \link{print.inbreed}
 #' 
@@ -32,7 +34,7 @@
 #' The package has three main goals:
 #' 
 #' \itemize{
-#' \item Assessing identity disequilibria and the potential to detect heterozygosity-fitness correlations based on global effects
+#' \item Assessing identity disequilibria and the potential to detect heterozygosity-fitness correlations 
 #' \item Providing insights on the sensitivity of these measures based on the number/type of molecular markers used
 #' \item Implementing computationally efficient functions in a flexible environment for analysing 
 #' inbreeding and HFC`s with both small and large datasets.

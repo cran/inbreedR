@@ -18,7 +18,7 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE,
 
 ## inbreedR
 
-The idea behind `inbreedR` is to provide a consistent framework for the analysis of inbreeding and heterozygosity-fitness correlations (HFCs) based on genetic markers. This vignette gives a practical introduction into the concept of the package and how to use the functions. For a more concise theoretical background and a citeable source please read our paper. We are happy about any suggestions and feedback on the package. Just write a mail to martin.adam.stoffel[at]gmail.com.
+The idea behind `inbreedR` is to provide a consistent framework for the analysis of inbreeding and heterozygosity-fitness correlations (HFCs) based on genetic markers. This vignette gives a practical introduction into the concept of the package and how to use the functions. For a more concise theoretical background and a citeable source please read our paper (*will be published soon*). We are happy about any suggestions and feedback on the package. Just write a mail to martin.adam.stoffel[at]gmail.com.
 
 
 ## Installation
@@ -26,10 +26,10 @@ The idea behind `inbreedR` is to provide a consistent framework for the analysis
 `inbreedR` is available on [CRAN](http://cran.r-project.org/). Here is the code to download and install the current stable release.
 
 ```{r, eval = FALSE}
-install.packages("inbeedR")
+install.packages("inbreedR")
 ```
 
-The latest version can be downloaded from [GitHub](https://github.com/mastoffel/inbreedR) with the following code:
+The development version can be downloaded from [GitHub](https://github.com/mastoffel/inbreedR) with the following code:
 
 ```{r, eval = FALSE}
 install.packages("devtools")
@@ -63,9 +63,9 @@ library("inbreedR")
   
 * `HHC`: Computes heterozygosity-heterozygosity correlations, another measure of identity disequilibrium [@balloux2004does].  
   
-* `r2_Wf` : Calculates the expected impact of inbreeding-level (f) on a fitness trait (W) with a formula derived by @szulkin2010heterozygosity.  
+* `r2_Wf` : Calculates the expected squared correlation of inbreeding-level (f) with a fitness trait (W) according to @szulkin2010heterozygosity.  
   
-* `r2_hf`: Calculates the expected impact of inbreeding-level (f) on heterozygosity (h) with a formula derived by @szulkin2010heterozygosity.
+* `r2_hf`: Calculates the expected quared correlation of inbreeding-level (f) with multilocus heterozygosity (h) according to @szulkin2010heterozygosity.
 
 * `simulate_g2`: A simulation that allows the user to draw different numbers of markers independently from a simulated genome and calculate respective $g_2$ values. Can be used to evaluate the effects of the number of individuals and loci on the precision and magnitude of $g_2$. 
 
@@ -121,6 +121,35 @@ mouse_microsats[1:8, 1:8]
 
 The same procedure works when you have letters (e.g. basepairs 'A', 'T') in two adjacent columns instead of microsatellite allele lengths.
 
+### Loading and extracting genotype information from VCF files
+
+SNP data will naturally occur as VCF file after variant calling. Here is a short workflow how
+to load a VCF file into R with the `vcfR package`, extract the genotypes and transform them 
+into a 0/1 format to be used within `inbreedR`.
+
+```{r, eval = FALSE}
+# install.packages("vcfR")
+# install.packages("reshape")
+library(vcfR)
+library(reshape2)
+vcf_file <- "yourvcffile.vcf"
+# read vcf
+vcf <- read.vcfR(vcf_file, verbose = FALSE )
+# extract genotypes
+gt <- extract.gt(vcf)
+# transpose and data.frame
+gt <- as.data.frame(t(gt), stringsAsFactors = FALSE)
+# NA handling
+gt[gt == "."] <- NA
+# split columns
+snp_geno <- do.call(cbind, apply(gt, 2, function(x) colsplit(x, "/", c("a","b"))))
+# convert
+mouse_snp_genotypes <- inbreedR::convert_raw(snp_geno)
+# check data
+check_data(mouse_snp_genotypes)
+```
+
+
 ## A short theory of heterozygosity-fitness correlations (HFC)
 
 Most HFC studies solely report the correlation between heterozygosity (*h*) and fitness (*W*).  However, according to HFC theory, this correlation results from the simultaneous effects of inbreeding level (*f*) on fitness ($r(W,f)$) and heterozygosity ($r(h,f$)) [@Slate:2004iibacadaeafagahaia; @szulkin2010heterozygosity]: 
@@ -147,7 +176,7 @@ The package provides two functions to calculate **$g_2$**, a proxy for Identity 
   
 * For large datasets, e.g. SNPs, the `g2_snps` function implements a computationally more feasible formula. This function also provides an additional argument for parallelization which distributes bootstrapping and permutation across cores.  The results of both functions can be plotted as histograms with CIs.       
 
-Have a look at the help files with `?g2_microsats` and `?g2_snps` for more information on the formulae. 
+Have a look at the help files with `?g2_microsats` and `?g2_snps` for more information on the formulas. 
 
 For both microsatellites and SNPs, `inbreedR` calculates confidence intervals by bootstrapping over individuals.  It also permutes the genetic data to generate a P-value for the null hypothesis of no variance in inbreeding in the sample (i.e. $g_2$ = 0). 
 
@@ -196,7 +225,7 @@ plot(HHC_mouse_snps, main = "SNPs",
 
 ## HFC parameters
 
-Assuming that HFCs are due to inbreeding depression, it is possible to calculate both the expected correlation between heterozygosity and inbreeding level ($\hat{r}^2(h, f)$) and the expected correlation between a fitness trait and inbreeding ($\hat{r}^2(W, f)$) as described in Equation 1.  These are implemented in `inbreedR` using the functions `r2_hf` and `r2_Wf`.  Equal to the `glm` function, the distribution of the fitness trait can be specified in the `family` argument, as shown below:
+Assuming that HFCs are due to inbreeding, it is possible to calculate both the expected correlation between heterozygosity and inbreeding level ($\hat{r}^2(h, f)$) and the expected correlation between a fitness trait and inbreeding ($\hat{r}^2(W, f)$) as described in Equation 1.  These are implemented in `inbreedR` using the functions `r2_hf` and `r2_Wf`.  Equal to the `glm` function, the distribution of the fitness trait can be specified in the `family` argument, as shown below:
 
 ```{r, echo=TRUE}
 # r^2 between inbreeding and heterozygosity
@@ -212,11 +241,10 @@ In addition, bootstrapping over individuals can be used to estimate confidence i
 hf <- r2_hf(genotypes = mouse_microsats, nboot = 100, type = "msats", parallel = FALSE)
 ```
 
-Note: For plotting the histogram with confidence interval for `r2_hf` you have to specify an additional argument to the
-`plot` function, because there will be another plotting possibility for the output of this function as you will read later in this vignette.
+Plotting the histogram with confidence interval for `r2_hf`.
 
 ```{r}
-plot(hf, plottype = "histogram")
+plot(hf)
 ```
 
 
@@ -279,19 +307,6 @@ inbreeding values of the individuals.
 ```{r sim_g2_true, echo=FALSE, fig.cap="Simulation: Sensitivity of g2 estimated from an increasing number of markers with true g2 value", fig.width=7, fig.height=4}
 plot(sim_g2, true_g2 = TRUE, main = "Microsatellites", cex.axis=0.85)
 ```
-
-The same simulation can be used to estimate the expected squared correlation between inbreeding and heterozygosity for an increasing number of markers with the `simulate_r2_hf` function as shown below. 
-
-```{r, echo=TRUE, results='hide'}
-sim_r2_hf_mouse_microsats <- simulate_r2_hf(n_ind = 20, H_nonInb = 0.5, meanF = 0.2, varF = 0.05,
-                                            subsets = c(4,6,8,10,12), reps = 100, 
-                                            type = "msats", CI = 0.95)
-```
-
-```{r r2_hf, echo=FALSE, fig.cap="Expected r2 between inbreeding level (f) and heterozygosity", fig.width=7, fig.height=4}
-plot(sim_r2_hf_mouse_microsats, main = "Microsatellites", cex.axis=0.85)
-```
-
 
 
 ## Extracting raw data from inbreedR objects 

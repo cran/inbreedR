@@ -1,4 +1,4 @@
-4fa91f9a60186f25efcc5f294df5b8f0 *DESCRIPTION
+30cd816cd0b275e71ee3e10361cb58f6 *DESCRIPTION
 e7a93554752778c9591c6871e2cbaea9 *NAMESPACE
 d52d4e1a23e29096ca51216033de089b *R/HHC.R
 4d5eee31a0cbb7a198909e8c459dedc8 *R/bodyweight.R
@@ -16,15 +16,15 @@ c8f0620fc8aa3c625a55759c6a999576 *R/r2_Wf.R
 eb65cf82090c854b37348d65f71ba4aa *R/sMLH.R
 7f1f569830584a19c03f0974535e8c3a *R/simulate_g2.R
 f88673c7673ac79218857ef80ddfe341 *R/simulate_r2_hf.R
-50d762eb93971da44e05a812d0772b6d *README.md
-922b0bb59bcc14d9e6c1d2177894dff5 *build/vignette.rds
+315bbedf9364f42248fa1e11a605e829 *README.md
+934bab1279f962ae7f7bb69467369270 *build/vignette.rds
 807954a886e49916a5a3422a920070c3 *data/bodyweight.rda
 7d869c2ad129215b429860162f7ab356 *data/mouse_msats.rda
 44e5707c52ae49a0589fbbecc503f292 *data/mouse_snps.rda
-74d11e5b288d22f808f5dcae5a617f00 *inst/CITATION
-ec26b54222968830bb44a81cd72ff28f *inst/doc/inbreedR_step_by_step.R
-f6299171f6822691004cc8864c7946c1 *inst/doc/inbreedR_step_by_step.Rmd
-21f75b65135748ea4f30441beea33184 *inst/doc/inbreedR_step_by_step.html
+36fe1060ba5b4a99122ef1af125c0b86 *inst/CITATION
+f0acb243c1cdf45a0a2c6ba69bc903cb *inst/doc/inbreedR_step_by_step.R
+78e58e3e2f759fccc2568d179315958f *inst/doc/inbreedR_step_by_step.Rmd
+b760e8bdcd6b32711b653bd90f73f725 *inst/doc/inbreedR_step_by_step.html
 a1f0bc274106904bf8af2fdcb676947f *man/HHC.Rd
 db86583382c722dac1a9f2388fac980e *man/MLH.Rd
 5c7a5825909e2ed9ffc89e34b7a378df *man/bodyweight.Rd
@@ -52,5 +52,5 @@ a8dd2c29e5ff123768dfe6045e82af5a *tests/testthat/test-r2_hf.R
 17d16593488c006a88cc59ff6ab06dfb *tests/testthat/test-sMLH.R
 d92f8e9a315043e1149f0e62cbd23e46 *tests/testthat/test-simulate_g2.R
 a3465d60b8b938025812deef8815a652 *tests/testthat/test-simulate_r2_hf.R
-b16d748c421d6d94ba5cfcc9746a38f6 *vignettes/bibliography.bib
-8b3fbec6f15d0a570d29912f2eeb350b *vignettes/inbreedR_step_by_step.Rmd
+2dec36b18fc01d0c40b5805ea1b96793 *vignettes/bibliography.bib
+78e58e3e2f759fccc2568d179315958f *vignettes/inbreedR_step_by_step.Rmd

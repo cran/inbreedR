@@ -4,7 +4,7 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE,
                       fig.width = 5, fig.height = 4) # warning = FALSE
 
 ## ---- eval = FALSE-------------------------------------------------------
-#  install.packages("inbeedR")
+#  install.packages("inbreedR")
 
 ## ---- eval = FALSE-------------------------------------------------------
 #  install.packages("devtools")
@@ -38,6 +38,27 @@ mouse_msats[1:8, 1:8]
 mouse_microsats <- convert_raw(mouse_msats) 
 mouse_microsats[1:8, 1:8]
 
+## ---- eval = FALSE-------------------------------------------------------
+#  # install.packages("vcfR")
+#  # install.packages("reshape")
+#  library(vcfR)
+#  library(reshape2)
+#  vcf_file <- "yourvcffile.vcf"
+#  # read vcf
+#  vcf <- read.vcfR(vcf_file, verbose = FALSE )
+#  # extract genotypes
+#  gt <- extract.gt(vcf)
+#  # transpose and data.frame
+#  gt <- as.data.frame(t(gt), stringsAsFactors = FALSE)
+#  # NA handling
+#  gt[gt == "."] <- NA
+#  # split columns
+#  snp_geno <- do.call(cbind, apply(gt, 2, function(x) colsplit(x, "/", c("a","b"))))
+#  # convert
+#  mouse_snp_genotypes <- inbreedR::convert_raw(snp_geno)
+#  # check data
+#  check_data(mouse_snp_genotypes)
+
 ## ---- echo=TRUE, results='hide'------------------------------------------
 g2_mouse_microsats <- g2_microsats(mouse_microsats, nperm = 100, nboot = 100, CI = 0.95)
 g2_mouse_snps <- g2_snps(mouse_snps, nperm = 100, nboot = 10, 
@@ -54,8 +75,8 @@ plot(g2_mouse_snps, main = "SNPs",
      col = "darkgoldenrod1", cex.axis=0.85)
 
 ## ---- echo=TRUE, results='hide'------------------------------------------
-HHC_mouse_microsats <- HHC(mouse_microsats , niter = 1000)
-HHC_mouse_snps <- HHC(mouse_snps, niter = 100)
+HHC_mouse_microsats <- HHC(mouse_microsats , reps = 1000)
+HHC_mouse_snps <- HHC(mouse_snps, reps = 100)
 
 ## ------------------------------------------------------------------------
 HHC_mouse_microsats
@@ -79,7 +100,7 @@ Wf <- r2_Wf(genotypes = mouse_microsats, trait = bodyweight,
 hf <- r2_hf(genotypes = mouse_microsats, nboot = 100, type = "msats", parallel = FALSE)
 
 ## ------------------------------------------------------------------------
-plot(hf, plottype = "histogram")
+plot(hf)
 
 ## ---- echo=TRUE, results='hide'------------------------------------------
 # g2
@@ -110,26 +131,15 @@ kable(df_msats, digits=3, caption="Descriptors of HFCs",
 
 
 ## ---- echo=TRUE, results='hide'------------------------------------------
-resamp_g2_mouse_microsats <- resample_g2(mouse_microsats, subsets = c(2,4,6,8,10,12), 
-                                     nboot = 100, type = "msats")
-resamp_g2_mouse_snps <- resample_g2(mouse_snps, subsets = c(100, 500, 1000, 2000, 5000, 
-                                    13000), nboot = 10, type = "snps")
+sim_g2 <- simulate_g2(n_ind = 20, H_nonInb = 0.5, meanF = 0.2, varF = 0.05,
+                      subsets = c(4,6,8,10,12), reps = 100, 
+                      type = "msats", CI = 0.95)
 
-## ----resample_g2, echo=TRUE, fig.cap="g2 for different subsets of markers", fig.width=7, fig.height=4----
-par(mfrow = c(1, 2))
-plot(resamp_g2_mouse_microsats, main = "Microsatellites", col = "cornflowerblue", cex.axis=0.85)
-plot(resamp_g2_mouse_snps, main = "SNPs", col = "darkgoldenrod1", cex.axis=0.85)
+## ----sim_g2, echo=FALSE, fig.cap="Simulation: Sensitivity of g2 estimated from an increasing number of markers", fig.width=7, fig.height=4----
+plot(sim_g2, main = "Microsatellites", cex.axis=0.85)
 
-## ---- echo=TRUE, results='hide'------------------------------------------
-r2_hf_mouse_microsats <- r2_hf(mouse_microsats, subsets = c(2,4,6,8,10,12), 
-                           nboot = 100, type = "msats")
-r2_hf_mouse_snps <- r2_hf(mouse_snps, subsets = c(100, 500, 1000, 2000, 5000, 13000), 
-                          nboot = 10, type = "snps")
-
-## ----r2_hf, echo=FALSE, fig.cap="Expected r2 between inbreeding level (f) and heterozygosity", fig.width=7, fig.height=4----
-par(mfrow = c(1, 2))
-plot(r2_hf_mouse_microsats, main = "Microsatellites", col = "cornflowerblue", cex.axis=0.85)
-plot(r2_hf_mouse_snps, main = "SNPs", col = "darkgoldenrod1", cex.axis=0.85)
+## ----sim_g2_true, echo=FALSE, fig.cap="Simulation: Sensitivity of g2 estimated from an increasing number of markers with true g2 value", fig.width=7, fig.height=4----
+plot(sim_g2, true_g2 = TRUE, main = "Microsatellites", cex.axis=0.85)
 
 ## ---- results = "hide"---------------------------------------------------
 g2_seals <- g2_microsats(mouse_microsats, nperm = 100, 

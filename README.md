@@ -2,7 +2,7 @@
 inbreedR
 ========
 
-![Build Status](https://travis-ci.org/mastoffel/inbreedR.svg?branch=master)
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/inbreedR)](https://cran.r-project.org/package=inbreedR) ![Build Status](https://travis-ci.org/mastoffel/inbreedR.svg?branch=master) [![](http://cranlogs.r-pkg.org/badges/grand-total/inbreedR)](https://cran.r-project.org/package=inbreedR)
 
 `inbreedR` provides functions and workflows for the analysis of inbreeding and heterozygosity-fitness correlations (HFCs) based on molecular markers such as microsatellites and SNPs. It has four main application areas:
 

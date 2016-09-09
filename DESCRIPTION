@@ -1,6 +1,6 @@
 Package: inbreedR
 Title: Analysing Inbreeding Based on Genetic Markers
-Version: 0.3.1
+Version: 0.3.2
 Authors@R: c(
         person(c("Martin", "A."), "Stoffel", email= "martin.adam.stoffel@gmail.com", 
         role = c("aut", "cre")),
@@ -17,11 +17,11 @@ Suggests: testthat (>= 0.10.0), knitr, rmarkdown
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
 NeedsCompilation: no
-Packaged: 2016-03-21 13:17:04 UTC; martin
+Packaged: 2016-09-09 08:39:31 UTC; martin
 Author: Martin A. Stoffel [aut, cre],
   Mareike Esser [aut],
   Joseph Hoffman [aut],
   Marty Kardos [aut]
 Maintainer: Martin A. Stoffel <martin.adam.stoffel@gmail.com>
 Repository: CRAN
-Date/Publication: 2016-03-21 23:19:36
+Date/Publication: 2016-09-09 12:23:25
